@@ -24,7 +24,7 @@ mod-notes/
 | Taraf | Nasıl |
 |---|---|
 | Çekirdek | `go get github.com/daybull/mod-notes@v0.1.0` → `cmd/server/modules.go` listesine `notes.New()` |
-| Panel | `package.json`: `"@daybull/mod-notes": "github:daybull/mod-notes#v0.1.0"` → `src/modules/index.ts` listesine `notesModule` |
+| Panel | `npm install "@daybull/mod-notes@https://codeload.github.com/daybull/mod-notes/tar.gz/refs/tags/v0.1.0"` → `src/modules/index.ts` listesine `notesModule` |
 
 ## Yetkiler
 
