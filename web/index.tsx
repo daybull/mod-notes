@@ -9,6 +9,14 @@ const NoteDetailPage = lazy(async () => ({ default: (await import("./NoteDetailP
 export const notesModule: PanelModule = {
   id: "notes",
   dashboard: [{ permission: "notes.read", Card: NotesStatCard }],
+  audit: {
+    actions: {
+      "notes.create": { label: "Not oluşturdu", tone: "primary" },
+      "notes.update": { label: "Notu güncelledi", tone: "primary" },
+      "notes.delete": { label: "Notu sildi", tone: "warning" },
+    },
+    entities: { note: "Not" },
+  },
   routes: [
     {
       path: "/notes",
