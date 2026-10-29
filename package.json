@@ -1,0 +1,19 @@
+{
+  "name": "@daybull/mod-notes",
+  "version": "0.1.0",
+  "description": "Notlar modülünün panel ekranları (admin-panel bu paketi git etiketiyle kurar).",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    "./web": "./web/index.tsx"
+  },
+  "files": ["web"],
+  "peerDependencies": {
+    "@tanstack/react-query": "^5",
+    "lucide-react": ">=1",
+    "react": "^19",
+    "react-router": ">=8",
+    "sonner": "^2"
+  }
+}
