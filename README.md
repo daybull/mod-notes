@@ -33,6 +33,14 @@ mod-notes/
 | `notes.read` | Not listesi ve detayı, genel bakış kartı |
 | `notes.write` | Not ekleme, düzenleme, silme |
 
+## Ayarlar
+
+Panelde Modüller → Notlar → Ayarlar (`modules.settings` yetkisi). Örnek ayar nasıl tanımlanır ve okunur: `notes.go` → `Settings` ve `checkBody`.
+
+| Ayar | Tip | Varsayılan | Ne yapar |
+|---|---|---|---|
+| `body_limit` | sayı (1–20000) | 20000 | Not metninin en fazla karakter sayısı |
+
 ## Sürüm
 
 Backend ve panel ekranları **aynı git etiketiyle** sürümlenir (`v0.x.y`). Uç nokta değişince ikisi birlikte güncellenir.
