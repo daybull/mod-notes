@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"unicode/utf8"
 
 	"github.com/danielgtaylor/huma/v2"
 	"github.com/jackc/pgx/v5"
@@ -23,9 +24,13 @@ import (
 var migrations embed.FS
 
 type Module struct {
-	db    *pgxpool.Pool
-	audit module.Auditor
+	db       *pgxpool.Pool
+	audit    module.Auditor
+	settings module.Settings
 }
+
+// maxBody, not metninin şema sınırıdır; body_limit ayarı bunu aşamaz.
+const maxBody = 20000
 
 func New() *Module { return &Module{} }
 
@@ -43,6 +48,11 @@ func (m *Module) Manifest() module.Manifest {
 		Menu: []module.MenuItem{
 			{Label: "Notlar", Path: "/notes", Icon: "notebook", Permission: "notes.read"},
 		},
+		Settings: []module.Setting{{
+			Key: "body_limit", Label: "Not metni en fazla (karakter)", Type: module.SettingNumber,
+			Description: "Bu sınırı aşan notlar kaydedilmez. Mevcut notlar etkilenmez.",
+			Default:     maxBody, Min: module.Ptr(1.0), Max: module.Ptr(float64(maxBody)),
+		}},
 	}
 }
 
@@ -92,7 +102,7 @@ type noteOutput struct{ Body Note }
 
 // Register, yolları "/api/v1/notes" altında kaydeder (önek çekirdekten gelir).
 func (m *Module) Register(api huma.API, deps module.Deps) error {
-	m.db, m.audit = deps.DB, deps.Audit
+	m.db, m.audit, m.settings = deps.DB, deps.Audit, deps.Settings
 
 	huma.Register(api, module.Protect(api, huma.Operation{
 		OperationID: "notes-list", Method: http.MethodGet, Path: "",
@@ -136,7 +146,22 @@ func (m *Module) get(ctx context.Context, in *idInput) (*noteOutput, error) {
 	return m.one(ctx, `SELECT `+cols+` FROM notes WHERE id = $1`, in.ID)
 }
 
+// checkBody, not metnini body_limit ayarına göre kontrol eder.
+func (m *Module) checkBody(ctx context.Context, body string) error {
+	vals, err := m.settings.Values(ctx)
+	if err != nil {
+		return err
+	}
+	if limit := int(vals.Number("body_limit")); utf8.RuneCountInString(body) > limit {
+		return huma.Error422UnprocessableEntity("not metni en fazla " + strconv.Itoa(limit) + " karakter olabilir")
+	}
+	return nil
+}
+
 func (m *Module) create(ctx context.Context, in *createInput) (*noteOutput, error) {
+	if err := m.checkBody(ctx, in.Body.Body); err != nil {
+		return nil, err
+	}
 	p := module.PrincipalFrom(ctx)
 	out, err := m.one(ctx, `INSERT INTO notes (title, body, created_by) VALUES ($1, $2, $3) RETURNING `+cols,
 		in.Body.Title, in.Body.Body, p.UserID)
@@ -148,6 +173,9 @@ func (m *Module) create(ctx context.Context, in *createInput) (*noteOutput, erro
 }
 
 func (m *Module) update(ctx context.Context, in *updateInput) (*noteOutput, error) {
+	if err := m.checkBody(ctx, in.Body.Body); err != nil {
+		return nil, err
+	}
 	out, err := m.one(ctx, `UPDATE notes SET title = $2, body = $3, updated_at = now() WHERE id = $1 RETURNING `+cols,
 		in.ID, in.Body.Title, in.Body.Body)
 	if err != nil {
