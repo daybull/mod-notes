@@ -1,6 +1,6 @@
 {
   "name": "@daybull/mod-notes",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Notlar modülünün panel ekranları (admin-panel bu paketi git etiketiyle kurar).",
   "private": true,
   "type": "module",
