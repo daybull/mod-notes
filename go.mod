@@ -1,10 +1,10 @@
-module github.com/daybull/mod-notes
+module github.com/daybull-corp/mod-notes
 
 go 1.26.0
 
 require (
 	github.com/danielgtaylor/huma/v2 v2.40.0
-	github.com/daybull/admin-sdk v0.1.0
+	github.com/daybull-corp/admin-sdk v0.2.0
 	github.com/jackc/pgx/v5 v5.11.0
 )
 
