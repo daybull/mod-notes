@@ -17,7 +17,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"github.com/daybull/admin-sdk/module"
+	"github.com/daybull-corp/admin-sdk/module"
 )
 
 //go:embed migrations/*.sql

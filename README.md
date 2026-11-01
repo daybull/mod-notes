@@ -1,6 +1,6 @@
 # mod-notes
 
-[admin-core](https://github.com/daybull/admin-core) için örnek modül: not ekleme, listeleme, düzenleme, silme.
+[admin-core](https://github.com/daybull-corp/admin-core) için örnek modül: not ekleme, listeleme, düzenleme, silme.
 Yeni modüller bu reponun yapısını izler.
 
 ## Yapı
@@ -12,7 +12,7 @@ mod-notes/
 ├── web/              panel ekranları (admin-panel bu klasörü kurar)
 │   ├── index.tsx     PanelModule: rotalar + genel bakış kartı
 │   └── api.ts        React Query kancaları
-├── go.mod            Go modülü: github.com/daybull/mod-notes
+├── go.mod            Go modülü: github.com/daybull-corp/mod-notes
 └── package.json      npm paketi: @daybull/mod-notes (sadece web/)
 ```
 
@@ -23,8 +23,8 @@ mod-notes/
 
 | Taraf | Nasıl |
 |---|---|
-| Çekirdek | `go get github.com/daybull/mod-notes@v0.1.0` → `cmd/server/modules.go` listesine `notes.New()` |
-| Panel | `npm install "@daybull/mod-notes@https://codeload.github.com/daybull/mod-notes/tar.gz/refs/tags/v0.1.0"` → `src/modules/index.ts` listesine `notesModule` |
+| Çekirdek | `go get github.com/daybull-corp/mod-notes@v0.1.0` → `cmd/server/modules.go` listesine `notes.New()` |
+| Panel | `npm install "@daybull/mod-notes@https://codeload.github.com/daybull-corp/mod-notes/tar.gz/refs/tags/v0.1.0"` → `src/modules/index.ts` listesine `notesModule` |
 
 ## Yetkiler
 
